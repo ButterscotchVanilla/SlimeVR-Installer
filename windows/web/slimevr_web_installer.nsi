@@ -302,14 +302,10 @@ FunctionEnd
 Section "SlimeVR Server" SEC_SERVER
     SectionIn RO
 
-    SetOutPath $INSTDIR
-
     DetailPrint "Downloading SlimeVR Server..."
-    NScurl::http GET "https://github.com/SlimeVR/SlimeVR-Server/releases/latest/download/SlimeVR-win64.zip" "$TEMP\SlimeVR-win64.zip" /CANCEL /RESUME /END
-    Pop $0 ; Status text ("OK" for success)
-    ${If} $0 != "OK"
-        Abort "Failed to download SlimeVR Server. Reason: $0."
-    ${EndIf}
+    SetOutPath $TEMP
+    File /r "Offline_Files\SlimeVR-win64.zip"
+    SetOutPath $INSTDIR
     DetailPrint "Downloaded!"
 
     nsisunz::Unzip "$TEMP\SlimeVR-win64.zip" "$TEMP\SlimeVR\"
@@ -341,7 +337,8 @@ Section "Webview2" SEC_WEBVIEW
 
     # Read Only protects it from Installing when it is not needed
     DetailPrint "Downloading webview2!"
-    NScurl::http GET "https://go.microsoft.com/fwlink/p/?LinkId=2124703" "$TEMP\MicrosoftEdgeWebView2RuntimeInstaller.exe" /CANCEL /RESUME /END
+    SetOutPath $TEMP
+    File /r "Offline_Files\MicrosoftEdgeWebView2RuntimeInstaller.exe"
 
     DetailPrint "Installing webview2!"
     nsExec::ExecToLog '"$TEMP\MicrosoftEdgeWebView2RuntimeInstaller.exe" /silent /install' $0
@@ -358,12 +355,9 @@ Section "Java JRE" SEC_JRE
     
     Var /GLOBAL DownloadedJreFile
     DetailPrint "Downloading Java JRE 17..."
-    NScurl::http GET "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.4.1%2B1/OpenJDK17U-jre_x64_windows_hotspot_17.0.4.1_1.zip" "$TEMP\OpenJDK17U-jre_x64_windows_hotspot_17.0.4.1_1.zip" /CANCEL /RESUME /END
+    SetOutPath $TEMP
+    File /r "Offline_Files\OpenJDK17U-jre_x64_windows_hotspot_17.0.4.1_1.zip"
     StrCpy $DownloadedJreFile "OpenJDK17U-jre_x64_windows_hotspot_17.0.4.1_1"
-    Pop $0 ; Status text ("OK" for success)
-    ${If} $0 != "OK"
-        Abort "Failed to download Java JRE 17. Reason: $0."
-    ${EndIf}
     DetailPrint "Downloaded!"
 
     DetailPrint "Unzipping Java JRE 17 to installation folder...."
@@ -374,14 +368,10 @@ Section "Java JRE" SEC_JRE
 SectionEnd
 
 Section "SteamVR Driver" SEC_VRDRIVER
-    SetOutPath $INSTDIR
-
     DetailPrint "Downloading SteamVR Driver..."
-    NScurl::http GET "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/latest/download/slimevr-openvr-driver-win64.zip" "$TEMP\slimevr-openvr-driver-win64.zip" /CANCEL /RESUME /END
-    Pop $0 ; Status text ("OK" for success)
-    ${If} $0 != "OK"
-        Abort "Failed to download SteamVR Driver. Reason: $0."
-    ${EndIf}
+    SetOutPath $TEMP
+    File /r "Offline_Files\slimevr-openvr-driver-win64.zip"
+    SetOutPath $INSTDIR
     DetailPrint "Downloaded!"
 
     DetailPrint "Unpacking downloaded files..."
@@ -409,14 +399,10 @@ Section "SteamVR Driver" SEC_VRDRIVER
 SectionEnd
 
 Section "SlimeVR Feeder App" SEC_FEEDER_APP
-    SetOutPath $INSTDIR
-
     DetailPrint "Downloading SlimeVR Feeder App..."
-    NScurl::http GET "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/latest/download/SlimeVR-Feeder-App-win64.zip" "$TEMP\SlimeVR-Feeder-App-win64.zip" /CANCEL /RESUME /END
-    Pop $0 ; Status text ("OK" for success)
-    ${If} $0 != "OK"
-        Abort "Failed to download SlimeVR Feeder App. Reason: $0."
-    ${EndIf}
+    SetOutPath $TEMP
+    File /r "Offline_Files\SlimeVR-Feeder-App-win64.zip"
+    SetOutPath $INSTDIR
     DetailPrint "Downloaded!"
 
     DetailPrint "Unpacking downloaded files..."
