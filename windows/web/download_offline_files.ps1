@@ -39,7 +39,7 @@ Function Download-File {
         # Write the last modified time from the request
         $FileInfo.LastWriteTime = $WebResponse.LastModified
 
-        Write-Output """$FileName"" has been downloaded!"
+        Write-Output """$FileName"" has been downloaded"
     }
     catch [System.Net.WebException] {
         # Check for a 304 error (file not modified)
@@ -55,7 +55,10 @@ Function Download-File {
     }
 }
 
-$DownloadDir = "Offline_Files"
+# Use download directory from environment variables, otherwise default to working directory
+$DownloadDir = if ($Env:WINDOWS_OFFLINE_FILES_DIR) { $Env:WINDOWS_OFFLINE_FILES_DIR } else { "Offline_Files" }
+
+Write-Output "Download directory set to ""$DownloadDir"""
 
 Download-File -Uri "https://github.com/SlimeVR/SlimeVR-Server/releases/latest/download/SlimeVR-win64.zip" -OutFile "$DownloadDir\SlimeVR-win64.zip"
 Download-File -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "$DownloadDir\MicrosoftEdgeWebView2RuntimeInstaller.exe"
