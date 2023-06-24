@@ -302,11 +302,10 @@ FunctionEnd
 Section "SlimeVR Server" SEC_SERVER
     SectionIn RO
 
-    DetailPrint "Downloading SlimeVR Server..."
+    DetailPrint "Installing SlimeVR Server..."
     SetOutPath $TEMP
     File /r "Offline_Files\SlimeVR-win64.zip"
     SetOutPath $INSTDIR
-    DetailPrint "Downloaded!"
 
     nsisunz::Unzip "$TEMP\SlimeVR-win64.zip" "$TEMP\SlimeVR\"
     Pop $0
@@ -336,11 +335,10 @@ Section "Webview2" SEC_WEBVIEW
     SectionIn RO
 
     # Read Only protects it from Installing when it is not needed
-    DetailPrint "Downloading webview2!"
+    DetailPrint "Installing webview2!"
     SetOutPath $TEMP
     File /r "Offline_Files\MicrosoftEdgeWebView2RuntimeInstaller.exe"
 
-    DetailPrint "Installing webview2!"
     nsExec::ExecToLog '"$TEMP\MicrosoftEdgeWebView2RuntimeInstaller.exe" /silent /install' $0
     Pop $0
     DetailPrint "Installing finished with $0."
@@ -354,11 +352,10 @@ Section "Java JRE" SEC_JRE
     SectionIn RO
     
     Var /GLOBAL DownloadedJreFile
-    DetailPrint "Downloading Java JRE 17..."
+    DetailPrint "Installing Java JRE 17..."
     SetOutPath $TEMP
     File /r "Offline_Files\OpenJDK17U-jre_x64_windows_hotspot_17.0.4.1_1.zip"
     StrCpy $DownloadedJreFile "OpenJDK17U-jre_x64_windows_hotspot_17.0.4.1_1"
-    DetailPrint "Downloaded!"
 
     DetailPrint "Unzipping Java JRE 17 to installation folder...."
     nsisunz::Unzip "$TEMP\$DownloadedJreFile.zip" "$TEMP\$DownloadedJreFile\"
@@ -368,13 +365,12 @@ Section "Java JRE" SEC_JRE
 SectionEnd
 
 Section "SteamVR Driver" SEC_VRDRIVER
-    DetailPrint "Downloading SteamVR Driver..."
+    DetailPrint "Installing SteamVR Driver..."
     SetOutPath $TEMP
     File /r "Offline_Files\slimevr-openvr-driver-win64.zip"
     SetOutPath $INSTDIR
-    DetailPrint "Downloaded!"
 
-    DetailPrint "Unpacking downloaded files..."
+    DetailPrint "Unpacking files..."
     nsisunz::Unzip "$TEMP\slimevr-openvr-driver-win64.zip" "$TEMP\slimevr-openvr-driver-win64\"
     Pop $0
     DetailPrint "Unzipping finished with $0."
@@ -399,13 +395,12 @@ Section "SteamVR Driver" SEC_VRDRIVER
 SectionEnd
 
 Section "SlimeVR Feeder App" SEC_FEEDER_APP
-    DetailPrint "Downloading SlimeVR Feeder App..."
+    DetailPrint "Installing SlimeVR Feeder App..."
     SetOutPath $TEMP
     File /r "Offline_Files\SlimeVR-Feeder-App-win64.zip"
     SetOutPath $INSTDIR
-    DetailPrint "Downloaded!"
 
-    DetailPrint "Unpacking downloaded files..."
+    DetailPrint "Unpacking files..."
     nsisunz::Unzip "$TEMP\SlimeVR-Feeder-App-win64.zip" "$TEMP"
     Pop $0
     DetailPrint "Unzipping finished with $0."
@@ -630,8 +625,8 @@ Section "-un." un.SEC_POST_UNINSTALL
 SectionEnd
 
 LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs latest SlimeVR Server."
-LangString DESC_SEC_JRE ${LANG_ENGLISH} "Downloads and copies Java JRE 17 to installation folder. Required for SlimeVR Server."
-LangString DESC_SEC_WEBVIEW ${LANG_ENGLISH} "Downloads and install Webview2 if not already installed. Required for the SlimeVR GUI"
+LangString DESC_SEC_JRE ${LANG_ENGLISH} "Copies Java JRE 17 to installation folder. Required for SlimeVR Server."
+LangString DESC_SEC_WEBVIEW ${LANG_ENGLISH} "Installs Webview2 if not already installed. Required for the SlimeVR GUI"
 LangString DESC_SEC_VRDRIVER ${LANG_ENGLISH} "Installs latest SteamVR Driver for SlimeVR."
 LangString DESC_SEC_USBDRIVERS ${LANG_ENGLISH} "A list of USB drivers that are used by various boards."
 LangString DESC_SEC_FEEDER_APP ${LANG_ENGLISH} "Installs SlimeVR Feeder App that sends position of SteamVR trackers (Vive trackers, controllers) to SlimeVR Server. Required for elbow tracking."
