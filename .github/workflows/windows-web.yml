@@ -23,6 +23,12 @@ jobs:
         run: mkdir -p "${PLUGINS_DIR}" | cp -rl "${WINDOWS_WEB_DIR}/plugins"/*/* "${PLUGINS_DIR}/"
         shell: bash
 
+      - name: Restore cached offline installer files
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.WINDOWS_OFFLINE_FILES_DIR }}
+          key: ${{ runner.os }}-offline-files
+
       - name: Download offline installer files
         run: ."${{ env.WINDOWS_WEB_DIR }}/download_offline_files.ps1"
         shell: pwsh
