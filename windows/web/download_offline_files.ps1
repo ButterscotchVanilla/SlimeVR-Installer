@@ -17,7 +17,7 @@ Function Download-File {
     }
 
     try {
-        Write-Output "Downloading ""$FileName""..."
+        Write-Output "Checking for ""$FileName""..."
 
         # Use HttpWebRequest to download file
         $WebRequest = [System.Net.HttpWebRequest]::Create($Uri);
@@ -28,13 +28,13 @@ Function Download-File {
             $WebRequest.IfModifiedSince = $FileInfo.LastWriteTime
         }
 
-        $WebRequest.Method = "GET";
+        $WebRequest.Method = "HEAD";
         [System.Net.HttpWebResponse]$WebResponse = $WebRequest.GetResponse()
 
-        # Read HTTP result from the $WebResponse
-        $Stream = New-Object System.IO.StreamReader($WebResponse.GetResponseStream())
-        # Save to file
-        $Stream.ReadToEnd() | Set-Content -Path "$OutFile" -Force
+        Write-Output "Downloading ""$FileName"" ($($WebResponse.ContentLength) bytes)..."
+
+        # Download the file using a simpler method
+        Invoke-WebRequest -Uri $Uri -OutFile $OutFile
 
         # Write the last modified time from the request
         $FileInfo.LastWriteTime = $WebResponse.LastModified
