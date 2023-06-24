@@ -15,7 +15,7 @@ jobs:
       WINDOWS_OFFLINE_FILES_DIR: ${{ github.workspace }}/windows/web/Offline_Files
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
 
@@ -34,13 +34,13 @@ jobs:
         shell: pwsh
 
       - name: Create NSIS installer
-        uses: joncloud/makensis-action@v3.6
+        uses: joncloud/makensis-action@v4
         with:
           script-file: ${{ env.WINDOWS_WEB_DIR }}/slimevr_web_installer.nsi
           additional-plugin-paths: ${{ env.PLUGINS_DIR }}
 
       - name: Upload the installer as a build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           # Artifact name
           name: "slimevr_web_installer" # optional, default is artifact
