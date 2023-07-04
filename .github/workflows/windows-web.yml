@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ env.WINDOWS_OFFLINE_FILES_DIR }}
-          key: ${{ runner.os }}-offline-files
+          key: ${{ runner.os }}-offline-files-v0.9.0
 
       - name: Download offline installer files
         run: ."${{ env.WINDOWS_WEB_DIR }}/download_offline_files.ps1"
