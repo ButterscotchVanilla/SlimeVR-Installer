@@ -60,7 +60,7 @@ $DestDir = New-Item (& { $Env:WINDOWS_OFFLINE_FILES_DIR ?? "offline-files" }) -I
 Write-Output "Output directory set to ""$DestDir"""
 
 $ServerVersion = "v0.1.4"
-$DriverVersion = "v0.1.1"
+$DriverVersion = "v0.1.0"
 
 $SharedDir = New-Item (Join-Path $DestDir "versions") -ItemType directory -Force
 
