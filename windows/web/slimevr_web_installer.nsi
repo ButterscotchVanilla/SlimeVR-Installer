@@ -386,7 +386,7 @@ Section "SlimeVR Server" SEC_SERVER
 
     DetailPrint "Installing SlimeVR Server..."
     SetOutPath "${SLIMETEMP}"
-    File /r "offline-files\SlimeVR-win64.zip"
+    File "offline-files\SlimeVR-win64.zip"
     SetOutPath $INSTDIR
 
     nsisunz::Unzip "${SLIMETEMP}\SlimeVR-win64.zip" "${SLIMETEMP}\SlimeVR\"
@@ -419,7 +419,7 @@ Section "Webview2" SEC_WEBVIEW
     # Read Only protects it from Installing when it is not needed
     DetailPrint "Installing webview2!"
     SetOutPath "${SLIMETEMP}"
-    File /r "offline-files\MicrosoftEdgeWebView2RuntimeInstaller.exe"
+    File "offline-files\MicrosoftEdgeWebView2RuntimeInstaller.exe"
     SetOutPath $INSTDIR
 
     nsExec::ExecToLog '"${SLIMETEMP}\MicrosoftEdgeWebView2RuntimeInstaller.exe" /silent /install' $0
@@ -436,7 +436,7 @@ Section "Java JRE" SEC_JRE
     
     DetailPrint "Installing Java JRE ${JREVersion}..."
     SetOutPath "${SLIMETEMP}"
-    File /r "offline-files\${JREDownloadedFileZip}"
+    File "offline-files\${JREDownloadedFileZip}"
     SetOutPath $INSTDIR
 
     # Make sure to delete all files on a update from jre, so if there is a new version no old files are left.
@@ -464,7 +464,7 @@ SectionEnd
 Section "SteamVR Driver" SEC_VRDRIVER
     DetailPrint "Installing SteamVR Driver..."
     SetOutPath "${SLIMETEMP}"
-    File /r "offline-files\slimevr-openvr-driver-win64.zip"
+    File "offline-files\slimevr-openvr-driver-win64.zip"
     SetOutPath $INSTDIR
 
     DetailPrint "Unpacking files..."
@@ -494,7 +494,7 @@ SectionEnd
 Section "SlimeVR Feeder App" SEC_FEEDER_APP
     DetailPrint "Installing SlimeVR Feeder App..."
     SetOutPath "${SLIMETEMP}"
-    File /r "offline-files\SlimeVR-Feeder-App-win64.zip"
+    File "offline-files\SlimeVR-Feeder-App-win64.zip"
     SetOutPath $INSTDIR
 
     DetailPrint "Unpacking files..."
