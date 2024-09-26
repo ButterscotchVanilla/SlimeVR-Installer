@@ -466,24 +466,6 @@ Section "SteamVR Driver" SEC_VRDRIVER
     ${EndIf}
 SectionEnd
 
-Section "SlimeVR Feeder App" SEC_FEEDER_APP
-    DetailPrint "Installing SlimeVR Feeder App..."
-    SetOutPath "${SLIMETEMP}"
-    File "offline-files\SlimeVR-Feeder-App-win64.zip"
-    SetOutPath $INSTDIR
-
-    DetailPrint "Unpacking files..."
-    nsisunz::Unzip "${SLIMETEMP}\SlimeVR-Feeder-App-win64.zip" "${SLIMETEMP}"
-    Pop $0
-    DetailPrint "Unzipping finished with $0."
-
-    DetailPrint "Copying SlimeVR Feeder App..."
-    CopyFiles /SILENT "${SLIMETEMP}\SlimeVR-Feeder-App-win64\*" "$INSTDIR\Feeder-App"
-
-    DetailPrint "Installing SlimeVR Feeder App driver..."
-    nsExec::ExecToLog '"$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" --install'
-SectionEnd
-
 SectionGroup /e "USB drivers" SEC_USBDRIVERS
 
     Section "CP210x driver" SEC_CP210X
@@ -604,10 +586,8 @@ Function componentsPre
     ${If} $STEAMDIR == ""
         MessageBox MB_OK $(DESC_STEAM_NOTFOUND)
         SectionSetFlags ${SEC_VRDRIVER} ${SF_USELECTED}|${SF_RO}
-        SectionSetFlags ${SEC_FEEDER_APP} ${SF_USELECTED}|${SF_RO}
     ${Else}
         SectionSetFlags ${SEC_VRDRIVER} ${SF_SELECTED}
-        SectionSetFlags ${SEC_FEEDER_APP} ${SF_SELECTED}
     ${EndIf}
 
     # Select JRE Mandatory if not found or outdated on Repair Preselect it
@@ -663,16 +643,6 @@ Section "-un.SteamVR Driver" un.SEC_VRDRIVER
     Delete "$INSTDIR\steamvr.ps1"
 SectionEnd
 
-Section "-un.SlimeVR Feeder App" un.SEC_FEEDER_APP
-    IfFileExists "$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" found not_found
-    found:
-        DetailPrint "Unregistering SlimeVR Feeder App driver..."
-        nsExec::ExecToLog '"$INSTDIR\Feeder-App\SlimeVR-Feeder-App.exe" --uninstall'
-        DetailPrint "Removing SlimeVR Feeder App..."
-        RMdir /r "$INSTDIR\Feeder-App"
-    not_found:
-SectionEnd
-
 Section "-un." un.SEC_FIREWALL
     DetailPrint "Removing SlimeVR Server from firewall exceptions...."
     nsExec::Exec '"$INSTDIR\firewall_uninstall.bat"'
@@ -692,7 +662,6 @@ LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs latest SlimeVR Server."
 LangString DESC_SEC_JRE ${LANG_ENGLISH} "Copies Java JRE 17 to installation folder. Required for SlimeVR Server."
 LangString DESC_SEC_VRDRIVER ${LANG_ENGLISH} "Installs latest SteamVR Driver for SlimeVR."
 LangString DESC_SEC_USBDRIVERS ${LANG_ENGLISH} "A list of USB drivers that are used by various boards."
-LangString DESC_SEC_FEEDER_APP ${LANG_ENGLISH} "Installs SlimeVR Feeder App that sends position of SteamVR trackers (Vive trackers, controllers) to SlimeVR Server. Required for elbow tracking."
 LangString DESC_SEC_CP210X ${LANG_ENGLISH} "Installs CP210X USB driver that comes with the following boards: NodeMCU v2, Wemos D1 Mini."
 LangString DESC_SEC_CH340 ${LANG_ENGLISH} "Installs CH340 USB driver that comes with the following boards: NodeMCU v3, SlimeVR, Wemos D1 Mini."
 LangString DESC_SEC_CH9102x ${LANG_ENGLISH} "Installs CH9102x USB driver that comes with the following boards: NodeMCU v2.1."
