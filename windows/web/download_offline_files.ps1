@@ -59,7 +59,7 @@ Function Get-File-From-Uri {
 $DestDir = New-Item (& { $Env:WINDOWS_OFFLINE_FILES_DIR ?? "offline-files" }) -ItemType directory -Force
 Write-Output "Output directory set to ""$DestDir"""
 
-$ServerVersion = "v0.0.3"
+$ServerVersion = "v0.0.1"
 $DriverVersion = "v0.0.1"
 
 $SharedDir = New-Item (Join-Path $DestDir "versions") -ItemType directory -Force
@@ -75,7 +75,7 @@ $ServerFile = Join-Path $ServerVerDir "SlimeVR-win64.zip"
 $JavaFile = Join-Path $JavaDir "OpenJDK17U-jre_x64_windows_hotspot_17.0.10_7.zip"
 $DriverFile = Join-Path $DriverVerDir "slimevr-openvr-driver-win64.zip"
 
-$ServerUrl = "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$ServerVersion/SlimeVR.zip"
+$ServerUrl = "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$ServerVersion/SlimeVR-Server-0.0.1.zip"
 $JavaUrl = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10%2B7/OpenJDK17U-jre_x64_windows_hotspot_17.0.10_7.zip"
 $DriverUrl = "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/download/$DriverVersion/slimevr-openvr-driver-win64.zip"
 
