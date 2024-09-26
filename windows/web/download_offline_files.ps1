@@ -59,9 +59,9 @@ Function Get-File-From-Uri {
 $DestDir = New-Item (& { $Env:WINDOWS_OFFLINE_FILES_DIR ?? "offline-files" }) -ItemType directory -Force
 Write-Output "Output directory set to ""$DestDir"""
 
-$ServerVersion = "v0.13.0"
-$DriverVersion = "v0.2.2"
-$FeederVersion = "v0.2.11"
+$ServerVersion = "v0.6.0"
+$DriverVersion = "v0.2.0"
+$FeederVersion = "v0.2.6"
 
 $SharedDir = New-Item (Join-Path $DestDir "versions") -ItemType directory -Force
 
