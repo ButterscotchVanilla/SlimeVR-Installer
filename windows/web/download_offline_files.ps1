@@ -61,7 +61,7 @@ Write-Output "Output directory set to ""$DestDir"""
 
 $ServerVersion = "v0.1.6"
 $DriverVersion = "v0.1.1"
-$FeederVersion = "v0.2.4"
+$FeederVersion = "v0.2.3"
 
 $SharedDir = New-Item (Join-Path $DestDir "versions") -ItemType directory -Force
 
