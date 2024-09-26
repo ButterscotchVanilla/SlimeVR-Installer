@@ -406,24 +406,6 @@ Section "SlimeVR Server" SEC_SERVER
     WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
 
-Section "Webview2" SEC_WEBVIEW
-    SectionIn RO
-
-    # Read Only protects it from Installing when it is not needed
-    DetailPrint "Installing webview2!"
-    SetOutPath "${SLIMETEMP}"
-    File "offline-files\MicrosoftEdgeWebView2RuntimeInstaller.exe"
-    SetOutPath $INSTDIR
-
-    nsExec::ExecToLog '"${SLIMETEMP}\MicrosoftEdgeWebView2RuntimeInstaller.exe" /silent /install' $0
-    Pop $0
-    DetailPrint "Installing finished with $0."
-    ${If} $0 != 0
-        Abort "Failed to install webview 2"
-    ${EndIf}
-
-SectionEnd
-
 Section "Java JRE" SEC_JRE
     SectionIn RO
     
@@ -616,7 +598,6 @@ Function componentsPre
     ${If} $SELECTED_INSTALLER_ACTION == "update"
         SectionSetFlags ${SEC_FIREWALL} 0
         SectionSetFlags ${SEC_REGISTERAPP} 0
-        SectionSetFlags ${SEC_WEBVIEW} ${SF_SELECTED}
         SectionSetFlags ${SEC_USBDRIVERS} ${SF_SECGRP}
         SectionSetFlags ${SEC_SERVER} ${SF_SELECTED}
     ${EndIf}
@@ -636,39 +617,6 @@ Function componentsPre
         SectionSetFlags ${SEC_JRE} ${SF_SELECTED}
     ${Else}        
         SectionSetFlags ${SEC_JRE} ${SF_USELECTED}
-    ${EndIf}
-
-    # Detect WebView2
-    # https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution#detect-if-a-suitable-webview2-runtime-is-already-installed
-    # Trying to solve #41 Installer doesn't always install WebView2
-    # Ignoring only user installed WebView2 it seems to make problems
-    ${If} ${RunningX64}
-        ReadRegStr $0 HKLM "SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" "pv"
-        ReadRegStr $1 HKCU "Software\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" "pv"
-    ${Else}
-        ReadRegStr $0 HKLM "SOFTWARE\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" "pv"
-        ReadRegStr $1 HKCU "Software\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" "pv"
-    ${EndIf}
-
-    ${If} $0 == ""
-    ${OrIf} $0 == "0.0.0.0"
-        StrCpy $0 ""
-    ${Else}
-        StrCpy $0 "1"
-    ${EndIf}
-
-    ${If} $1 == ""
-    ${OrIf} $1 == "0.0.0.0"
-        StrCpy $1 ""
-    ${Else}
-        StrCpy $1 "1"
-    ${EndIf}
-
-    ${If} $0 == ""
-    ${AndIf} $1 == ""
-        SectionSetFlags ${SEC_WEBVIEW} ${SF_SELECTED}|${SF_RO}
-    ${Else}
-        SectionSetFlags ${SEC_WEBVIEW} ${SF_USELECTED}
     ${EndIf}
 
 FunctionEnd
@@ -742,7 +690,6 @@ SectionEnd
 
 LangString DESC_SEC_SERVER ${LANG_ENGLISH} "Installs latest SlimeVR Server."
 LangString DESC_SEC_JRE ${LANG_ENGLISH} "Copies Java JRE 17 to installation folder. Required for SlimeVR Server."
-LangString DESC_SEC_WEBVIEW ${LANG_ENGLISH} "Installs Webview2 if not already installed. Required for the SlimeVR GUI"
 LangString DESC_SEC_VRDRIVER ${LANG_ENGLISH} "Installs latest SteamVR Driver for SlimeVR."
 LangString DESC_SEC_USBDRIVERS ${LANG_ENGLISH} "A list of USB drivers that are used by various boards."
 LangString DESC_SEC_FEEDER_APP ${LANG_ENGLISH} "Installs SlimeVR Feeder App that sends position of SteamVR trackers (Vive trackers, controllers) to SlimeVR Server. Required for elbow tracking."
@@ -757,7 +704,6 @@ LangString DESC_PROCESS_ERROR ${LANG_ENGLISH} "An error happend while trying for
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_SERVER} $(DESC_SEC_SERVER)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_JRE} $(DESC_SEC_JRE)
-    !insertmacro MUI_DESCRIPTION_TEXT ${SEC_WEBVIEW} $(DESC_SEC_WEBVIEW)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_VRDRIVER} $(DESC_SEC_VRDRIVER)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_USBDRIVERS} $(DESC_SEC_USBDRIVERS)
     !insertmacro MUI_DESCRIPTION_TEXT ${SEC_CP210X} $(DESC_SEC_CP210X)

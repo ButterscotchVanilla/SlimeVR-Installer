@@ -66,7 +66,6 @@ $FeederVersion = "v0.2.4"
 $SharedDir = New-Item (Join-Path $DestDir "versions") -ItemType directory -Force
 
 $ServerDir = New-Item (Join-Path $SharedDir "server") -ItemType directory -Force
-$WebView2Dir = New-Item (Join-Path $SharedDir "webview2") -ItemType directory -Force
 $JavaDir = New-Item (Join-Path $SharedDir "java") -ItemType directory -Force
 $DriverDir = New-Item (Join-Path $SharedDir "driver") -ItemType directory -Force
 $FeederDir = New-Item (Join-Path $SharedDir "feeder") -ItemType directory -Force
@@ -76,25 +75,22 @@ $DriverVerDir = New-Item (Join-Path $DriverDir $DriverVersion) -ItemType directo
 $FeederVerDir = New-Item (Join-Path $FeederDir $FeederVersion) -ItemType directory -Force
 
 $ServerFile = Join-Path $ServerVerDir "SlimeVR-win64.zip"
-$WebView2File = Join-Path $WebView2Dir "MicrosoftEdgeWebView2RuntimeInstaller.exe"
 $JavaFile = Join-Path $JavaDir "OpenJDK17U-jre_x64_windows_hotspot_17.0.10_7.zip"
 $DriverFile = Join-Path $DriverVerDir "slimevr-openvr-driver-win64.zip"
 $FeederFile = Join-Path $FeederVerDir "SlimeVR-Feeder-App-win64.zip"
 
 $ServerUrl = "https://github.com/SlimeVR/SlimeVR-Server/releases/download/$ServerVersion/SlimeVR.zip"
-$WebView2Url = "https://go.microsoft.com/fwlink/p/?LinkId=2124703"
 $JavaUrl = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10%2B7/OpenJDK17U-jre_x64_windows_hotspot_17.0.10_7.zip"
 $DriverUrl = "https://github.com/SlimeVR/SlimeVR-OpenVR-Driver/releases/download/$DriverVersion/slimevr-openvr-driver-win64.zip"
 $FeederUrl = "https://github.com/SlimeVR/SlimeVR-Feeder-App/releases/download/$FeederVersion/SlimeVR-Feeder-App-win64.zip"
 
 Get-File-From-Uri -Uri $ServerUrl -OutFile $ServerFile
-Get-File-From-Uri -Uri $WebView2Url -OutFile $WebView2File
 Get-File-From-Uri -Uri $JavaUrl -OutFile $JavaFile
 Get-File-From-Uri -Uri $DriverUrl -OutFile $DriverFile
 Get-File-From-Uri -Uri $FeederUrl -OutFile $FeederFile
 
 Write-Output "Copying downloaded files to output directory..."
-Copy-Item @($JavaFile, $WebView2File, $ServerFile, $DriverFile, $FeederFile) $DestDir -Force
+Copy-Item @($JavaFile, $ServerFile, $DriverFile, $FeederFile) $DestDir -Force
 
 Write-Output "Generating installer manifest..."
 $BaseFolder = $Env:WINDOWS_WEB_DIR ?? "."
@@ -104,7 +100,6 @@ Server $ServerVersion ($ServerUrl)
 Driver $DriverVersion ($DriverUrl)
 Feeder-App $FeederVersion ($FeederUrl)
 Java 17.0.4.1+1-jre ($JavaUrl)
-WebView2 [online installer, exe included] ($WebView2Url)
 
 # Workflow run
 $($Env:GH_RUN_URL)
