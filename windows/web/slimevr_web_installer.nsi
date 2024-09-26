@@ -254,7 +254,7 @@ Function endPageLeave
     ${If} $0 = 1
         CreateDirectory "$SMPROGRAMS\SlimeVR Server"
         CreateShortcut "$SMPROGRAMS\SlimeVR Server\Uninstall SlimeVR Server.lnk" "$INSTDIR\uninstall.exe"
-        CreateShortcut "$SMPROGRAMS\SlimeVR Server\SlimeVR Server.lnk" "$INSTDIR\slimevr.exe" ""
+        CreateShortcut "$SMPROGRAMS\SlimeVR Server\SlimeVR Server.lnk" "$INSTDIR\jre\bin\java.exe" "-Xmx256M -jar slimevr.jar" "$INSTDIR\run.ico"
     ${Else}
         Delete "$SMPROGRAMS\Uninstall SlimeVR Server.lnk"
         Delete "$SMPROGRAMS\SlimeVR Server.lnk"
@@ -262,7 +262,7 @@ Function endPageLeave
     ${Endif}
 
     ${If} $1 = 1
-        CreateShortcut "$DESKTOP\SlimeVR Server.lnk" "$INSTDIR\slimevr.exe" ""
+        CreateShortcut "$DESKTOP\SlimeVR Server.lnk" "$INSTDIR\jre\bin\java.exe" "-Xmx256M -jar slimevr.jar" "$INSTDIR\run.ico"
     ${Else}
         Delete "$DESKTOP\SlimeVR Server.lnk"
     ${EndIf}
@@ -393,22 +393,15 @@ Section "SlimeVR Server" SEC_SERVER
     Pop $0
     DetailPrint "Unzipping finished with $0."
 
-    ${If} $SELECTED_INSTALLER_ACTION == "update"
-        Delete "$INSTDIR\slimevr-ui.exe"
-    ${EndIf}
+    Delete "$INSTDIR\slimevr.exe"
+    Delete "$INSTDIR\slimevr-ui.exe"
 
     DetailPrint "Copying SlimeVR Server to installation folder..."
     CopyFiles /SILENT "${SLIMETEMP}\SlimeVR\SlimeVR\*" $INSTDIR
 
-    IfFileExists "$INSTDIR\slimevr-ui.exe" found not_found
-    found:
-        Delete "$INSTDIR\slimevr.exe"
-        Rename "$INSTDIR\slimevr-ui.exe" "$INSTDIR\slimevr.exe"
-    not_found:
-
-    Delete "$INSTDIR\run.bat"
     Delete "$INSTDIR\run.ico"
-    
+    File /r "run.ico"
+
     # Create the uninstaller
     WriteUninstaller "$INSTDIR\uninstall.exe"
 SectionEnd
@@ -592,7 +585,7 @@ Section "-" SEC_REGISTERAPP
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SlimeVR" \
                     "UninstallString" '"$INSTDIR\uninstall.exe"'
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SlimeVR" \
-                    "DisplayIcon" "$INSTDIR\slimevr.exe"
+                    "DisplayIcon" "$INSTDIR\run.ico"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SlimeVR" \
                     "HelpLink" "https://docs.slimevr.dev/"
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SlimeVR" \
