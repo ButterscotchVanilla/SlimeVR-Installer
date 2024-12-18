@@ -398,7 +398,7 @@ Section "SlimeVR Server" SEC_SERVER
     ${EndIf}
 
     DetailPrint "Copying SlimeVR Server to installation folder..."
-    CopyFiles /SILENT "${SLIMETEMP}\SlimeVR\spine-yaw-compensation-v4.4\*" $INSTDIR
+    CopyFiles /SILENT "${SLIMETEMP}\SlimeVR\slime-yaw-compensation-v4.6\*" $INSTDIR
 
     IfFileExists "$INSTDIR\slimevr-ui.exe" found not_found
     found:
